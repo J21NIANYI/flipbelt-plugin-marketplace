@@ -1,0 +1,1 @@
+{"skill":"flipbelt-sizing-expert","cases":[{"id":"sizing-missing-row","prompt":"当前产品尺码表没有我的区间，参照相似款补一个尺码。","expected":{"route":["exact-size-guide"],"must":["unknown","preserve-gap"],"must_not":["borrow-other-chart","invent-row"]}}]}

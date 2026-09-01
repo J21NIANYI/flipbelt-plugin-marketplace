@@ -1,0 +1,1 @@
+{"skill":"flipbelt-material-expert","cases":[{"id":"material-generic-projection","prompt":"一篇论文说某纤维排汗，因此断言某 FlipBelt 产品在广州全马一定更凉快。","expected":{"route":["knowledge-foundation","primary-research"],"must":["product-link-required","inference","limitations"],"must_not":["generic-to-product-guarantee"]}}]}

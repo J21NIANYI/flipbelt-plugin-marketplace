@@ -1,0 +1,35 @@
+{
+  "name": "flipbelt-color-naming",
+  "version": "1.0.0",
+  "description": "Create and review consistent Chinese color, palette, and theme names for FlipBelt products.",
+  "author": {
+    "name": "FlipBelt"
+  },
+  "repository": "https://github.com/J21NIANYI/flipbelt-plugin-marketplace",
+  "license": "Proprietary",
+  "keywords": [
+    "flipbelt",
+    "color-naming",
+    "palette",
+    "branding"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "FlipBelt 颜色命名",
+    "shortDescription": "生成统一、准确、适合运动产品的中文颜色名。",
+    "longDescription": "为飞比特商品色卡、色彩企划和系列主题生成或审核中文颜色名称；优先准确表达色相，再加入克制的自然与运动意象。",
+    "developerName": "FlipBelt",
+    "category": "Productivity",
+    "capabilities": [
+      "color-naming",
+      "palette-review",
+      "brand-consistency"
+    ],
+    "defaultPrompt": [
+      "为这组产品颜色生成统一的中文名称。",
+      "检查这些颜色名是否准确、自然且适合运动产品。",
+      "为这一组色彩拟定主题名和备选名称。"
+    ],
+    "brandColor": "#B8F34A"
+  }
+}

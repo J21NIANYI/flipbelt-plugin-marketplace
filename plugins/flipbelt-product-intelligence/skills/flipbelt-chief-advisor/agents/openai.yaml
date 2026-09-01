@@ -1,0 +1,13 @@
+interface:
+  display_name: "FlipBelt 总顾问"
+  short_description: "路由多领域问题并综合证据、冲突与不确定性"
+  default_prompt: "Use $flipbelt-chief-advisor to route and synthesize this multi-domain FlipBelt question."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "flipbelt-kb"
+      description: "FlipBelt 统一 OAuth 只读知识库 MCP Server"
+      transport: "streamable_http"
+      url: "https://wiki.flipbeltchina.com/mcp"
+policy:
+  allow_implicit_invocation: false

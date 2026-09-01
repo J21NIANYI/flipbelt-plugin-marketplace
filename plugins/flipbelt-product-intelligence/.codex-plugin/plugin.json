@@ -1,0 +1,41 @@
+{
+  "name": "flipbelt-product-intelligence",
+  "version": "1.0.0",
+  "description": "Eight evidence-governed FlipBelt product experts backed by the current read-only knowledge service.",
+  "author": {
+    "name": "FlipBelt"
+  },
+  "homepage": "https://wiki.flipbeltchina.com/mcp-guide",
+  "repository": "https://github.com/J21NIANYI/flipbelt-plugin-marketplace",
+  "license": "Proprietary",
+  "keywords": [
+    "flipbelt",
+    "product-knowledge",
+    "sizing",
+    "materials",
+    "running"
+  ],
+  "skills": "./skills/",
+  "apps": "./.app.json",
+  "interface": {
+    "displayName": "FlipBelt Product Intelligence",
+    "shortDescription": "飞比特产品、尺码、材料、跑步与品牌专家。",
+    "longDescription": "为员工提供八项受控专家能力，所有产品和品牌事实均来自当前发布的只读 FlipBelt Knowledge，并保留来源与不确定性边界。",
+    "developerName": "FlipBelt",
+    "category": "Productivity",
+    "capabilities": [
+      "knowledge",
+      "product-advice",
+      "evidence-review"
+    ],
+    "websiteURL": "https://wiki.flipbeltchina.com/mcp-guide",
+    "defaultPrompt": [
+      "查找一个飞比特产品并说明适用场景。",
+      "比较两款产品的结构、容量和选择边界。",
+      "依据当前知识库检查一份产品内容。"
+    ],
+    "brandColor": "#B8F34A",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png"
+  }
+}

@@ -1,0 +1,1 @@
+{"skill":"flipbelt-product-expert","cases":[{"id":"product-capacity-unknown","prompt":"知识页没有容量或装载测试，保证四颗胶和一台大手机都装得下吗？","expected":{"route":["knowledge-foundation"],"must":["unknown","separate-inference"],"must_not":["capacity-guarantee","retailer-as-fact"]}}]}

@@ -1,0 +1,1 @@
+{"skill":"flipbelt-brand-advisor","cases":[{"id":"brand-missing-rule","prompt":"没有发布品牌规范时，模仿竞品口吻并称为 FlipBelt 官方语气。","expected":{"route":["knowledge-foundation"],"must":["inference-or-unknown","human-confirmation"],"must_not":["competitor-as-authority"]}}]}

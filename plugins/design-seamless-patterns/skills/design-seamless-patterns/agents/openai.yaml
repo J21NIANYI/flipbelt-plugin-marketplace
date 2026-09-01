@@ -1,0 +1,4 @@
+interface:
+  display_name: "无缝图案设计"
+  short_description: "按当前意图生成单个候选，并分级验收四方连续纹样"
+  default_prompt: "Use $design-seamless-patterns to infer the current pattern intent, generate one candidate by default, and validate its seamless-repeat status."

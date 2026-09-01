@@ -1,0 +1,13 @@
+interface:
+  display_name: "FlipBelt 尺码专家"
+  short_description: "依据当前尺码指南解释量体、边界和推荐条件"
+  default_prompt: "Use $flipbelt-sizing-expert to answer a FlipBelt sizing question without inventing missing data."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "flipbelt-kb"
+      description: "FlipBelt 统一 OAuth 只读知识库 MCP Server"
+      transport: "streamable_http"
+      url: "https://wiki.flipbeltchina.com/mcp"
+policy:
+  allow_implicit_invocation: false

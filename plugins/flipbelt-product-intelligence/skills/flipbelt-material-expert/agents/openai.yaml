@@ -1,0 +1,13 @@
+interface:
+  display_name: "FlipBelt 面辅料专家"
+  short_description: "结合发布事实、标准与研究审慎分析材料表现"
+  default_prompt: "Use $flipbelt-material-expert to assess a material claim with product and research evidence separated."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "flipbelt-kb"
+      description: "FlipBelt 统一 OAuth 只读知识库 MCP Server"
+      transport: "streamable_http"
+      url: "https://wiki.flipbeltchina.com/mcp"
+policy:
+  allow_implicit_invocation: false

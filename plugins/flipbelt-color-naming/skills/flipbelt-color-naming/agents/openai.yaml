@@ -1,0 +1,4 @@
+interface:
+  display_name: "FlipBelt Color Naming"
+  short_description: "为飞比特商品色卡和色彩企划生成统一的中文颜色与主题命名"
+  default_prompt: "使用 $flipbelt-color-naming 为这组飞比特产品颜色生成统一中文命名。"

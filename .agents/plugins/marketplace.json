@@ -1,0 +1,44 @@
+{
+  "name": "flipbelt-team",
+  "interface": {
+    "displayName": "FlipBelt Team"
+  },
+  "plugins": [
+    {
+      "name": "flipbelt-product-intelligence",
+      "source": {
+        "source": "local",
+        "path": "./plugins/flipbelt-product-intelligence"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "flipbelt-color-naming",
+      "source": {
+        "source": "local",
+        "path": "./plugins/flipbelt-color-naming"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "design-seamless-patterns",
+      "source": {
+        "source": "local",
+        "path": "./plugins/design-seamless-patterns"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

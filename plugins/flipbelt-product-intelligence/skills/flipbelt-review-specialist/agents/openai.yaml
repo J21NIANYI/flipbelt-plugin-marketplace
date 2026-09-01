@@ -1,0 +1,13 @@
+interface:
+  display_name: "FlipBelt 审核专员"
+  short_description: "按证据、边界和领域责任输出自动审查建议"
+  default_prompt: "Use $flipbelt-review-specialist to audit these claims and produce a non-final review recommendation."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "flipbelt-kb"
+      description: "FlipBelt 统一 OAuth 只读知识库 MCP Server"
+      transport: "streamable_http"
+      url: "https://wiki.flipbeltchina.com/mcp"
+policy:
+  allow_implicit_invocation: false

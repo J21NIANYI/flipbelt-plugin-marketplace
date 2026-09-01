@@ -1,0 +1,35 @@
+{
+  "name": "design-seamless-patterns",
+  "version": "1.0.0",
+  "description": "Design, revise, prompt, and validate seamless repeat patterns for textile and surface graphics.",
+  "author": {
+    "name": "FlipBelt"
+  },
+  "repository": "https://github.com/J21NIANYI/flipbelt-plugin-marketplace",
+  "license": "Proprietary",
+  "keywords": [
+    "seamless-pattern",
+    "textile-design",
+    "repeat-tile",
+    "surface-graphics"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "无缝图案设计",
+    "shortDescription": "设计、修改并分级验证四方连续纹样。",
+    "longDescription": "根据当前参考和设计目标生成一个无缝图案候选，分别判断视觉效果与接缝状态；复杂纹样触发停止条件时明确转交人工精修。",
+    "developerName": "FlipBelt",
+    "category": "Productivity",
+    "capabilities": [
+      "pattern-design",
+      "repeat-validation",
+      "image-generation"
+    ],
+    "defaultPrompt": [
+      "根据这些参考图设计一个无缝图案候选。",
+      "检查这张图的四方连续接缝和重复节奏。",
+      "优化这段无缝图案生成提示词。"
+    ],
+    "brandColor": "#B8F34A"
+  }
+}
