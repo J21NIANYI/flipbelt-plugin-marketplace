@@ -101,6 +101,18 @@ def main() -> int:
     app = app_manifest.get("apps", {}).get("flipbelt-knowledge", {})
     if app.get("id") != "asdk_app_6a96a5e762008191a4ec2f8b129cc671":
         errors.append("flipbelt-product-intelligence: invalid Workspace App reference")
+    review = product / "skills" / "flipbelt-review-specialist"
+    for relative in [
+        "references/document-review-contract.md",
+        "scripts/compare_size_chart.ps1",
+        "evals/cases.json",
+    ]:
+        if not (review / relative).is_file():
+            errors.append(f"flipbelt-product-intelligence: missing review parity asset {relative}")
+    review_text = (review / "SKILL.md").read_text(encoding="utf-8") if (review / "SKILL.md").is_file() else ""
+    for marker in ["PASS", "FAIL", "MISSING", "NO-SOURCE", "search_flipbelt_kb", "get_flipbelt_page", "get_flipbelt_asset"]:
+        if marker not in review_text:
+            errors.append(f"flipbelt-product-intelligence: Review Specialist missing contract marker {marker}")
 
     for path in ROOT.rglob("*"):
         if not path.is_file() or ".git" in path.parts or path.suffix.lower() == ".png":

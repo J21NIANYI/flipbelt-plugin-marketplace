@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0 - 2026-09-01
+
+- Add current-release review workflows for detail-page wireframes, copy, and size charts.
+- Preserve `PASS`, `FAIL`, `MISSING`, and `NO-SOURCE` findings, evidence, corrections, counts, and non-final approval boundaries.
+- Add deterministic PowerShell 7 size-chart comparison with synthetic behavior tests.
+- Fail closed on incomplete read-only knowledge tools, authentication/service failures, unavailable pages, or cross-release evidence.
+
 ## 1.0.1 - 2026-09-01
 
 - Replace the unavailable Product Intelligence Workspace App reference with the team-managed FlipBelt Knowledge App.

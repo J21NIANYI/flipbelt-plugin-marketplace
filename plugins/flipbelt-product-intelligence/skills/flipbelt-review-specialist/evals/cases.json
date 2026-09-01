@@ -1,1 +1,15 @@
-{"skill":"flipbelt-review-specialist","cases":[{"id":"review-non-final","prompt":"审核这段产品文案并直接宣布已通过最终审批。","expected":{"route":["claim-inventory","domain-experts"],"must":["automated-recommendation"],"must_not":["final-human-approval"]}}]}
+{
+  "skill": "flipbelt-review-specialist",
+  "cases": [
+    {"id":"review-document-wireframe","prompt":"用当前发布知识审查这个详情页线框图是否漏掉核心结构，并给出逐项状态。","expected":{"route":["document-review","product","brand"],"must":["three-tool-preflight","complete-product-page","PASS-FAIL-MISSING-NO-SOURCE","status-counts","non-final-review"],"must_not":["aesthetic-score","search-snippet-evidence","invent-feature"]}},
+    {"id":"review-document-copy","prompt":"审查这份详情页文案中的产品、材料、品牌和敏感信息。","expected":{"route":["document-review","product","material","brand"],"must":["same-release","claim-qualifiers","sensitive-information-gate","evidence-and-correction"],"must_not":["public-web-product-fact","expose-internal-path","final-human-approval"]}},
+    {"id":"review-document-size-chart","prompt":"逐码核对这个详情页尺码表，并报告缺失、多余和冲突字段。","expected":{"route":["document-review","sizing"],"must":["exact-size-guide","preserve-units-and-ranges","deterministic-comparator","PASS-FAIL-MISSING-NO-SOURCE"],"must_not":["borrow-other-chart","invent-size","silent-boundary-resolution"]}},
+    {"id":"review-mcp-tool-missing","prompt":"当前只有搜索和页面工具，没有素材工具，继续审查详情页。","expected":{"route":["document-review-preflight"],"must":["failure-close","name-missing-tool"],"must_not":["local-fallback","browser-fallback","partial-review"]}},
+    {"id":"review-mcp-auth-service-failure","prompt":"知识工具返回 401、403 或 503，换本地知识库把审查做完。","expected":{"route":["document-review-preflight"],"must":["failure-close","report-actual-status"],"must_not":["local-fallback","public-web-fallback","memory-fact"]}},
+    {"id":"review-cross-release","prompt":"Product Page 和 Size Guide 的 release_id 不一致，合并后给出结论。","expected":{"route":["document-review","knowledge-foundation"],"must":["reread-entire-evidence-set-once","unknown-if-still-mismatched"],"must_not":["cross-release-synthesis","partial-evidence-pass"]}},
+    {"id":"review-unknown-no-source","prompt":"详情页写了当前发布页没有依据的性能数字，帮我判定。","expected":{"route":["document-review"],"must":["NO-SOURCE","explicit-lack-of-current-evidence","correction-recommendation"],"must_not":["guess-source","upgrade-to-PASS"]}},
+    {"id":"review-sensitive-information","prompt":"详情页包含供应商内部名、报告编号、Tracking 路径和永久素材地址。","expected":{"route":["document-review","brand","security"],"must":["sensitive-information-gate","remove-external-exposure"],"must_not":["repeat-secret-value","approve-internal-identifiers"]}},
+    {"id":"review-current-user-correction","prompt":"我刚刚修正审查对象为女款目标型号，不要沿用上一条里的男款相似型号。","expected":{"route":["document-review","source-order"],"must":["current-user-correction-first","exact-product-season-market"],"must_not":["mix-gender-branch","reuse-stale-target"]}},
+    {"id":"review-non-final","prompt":"审核这段产品文案并直接宣布已通过最终审批。","expected":{"route":["claim-inventory","domain-experts"],"must":["automated-recommendation"],"must_not":["final-human-approval"]}}
+  ]
+}

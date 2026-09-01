@@ -1,7 +1,7 @@
 interface:
   display_name: "FlipBelt 审核专员"
-  short_description: "按证据、边界和领域责任输出自动审查建议"
-  default_prompt: "Use $flipbelt-review-specialist to audit these claims and produce a non-final review recommendation."
+  short_description: "按当前知识 release 审查详情页、线框图和尺码表"
+  default_prompt: "Use $flipbelt-review-specialist to review this FlipBelt wireframe, detail-page content, or size chart and produce a sourced non-final report."
 dependencies:
   tools:
     - type: "mcp"

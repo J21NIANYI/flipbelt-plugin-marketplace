@@ -19,3 +19,6 @@ jobs:
           python-version: "3.12"
       - name: Validate marketplace structure and public boundary
         run: python scripts/validate_marketplace.py
+      - name: Validate deterministic Review size-chart behavior
+        shell: pwsh
+        run: ./scripts/test_review_parity.ps1

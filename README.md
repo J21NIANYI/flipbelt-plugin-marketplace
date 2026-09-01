@@ -4,7 +4,7 @@ FlipBelt 员工使用的 ChatGPT 与 Codex 插件分发仓库。仓库保持公�
 
 ## 包含的插件
 
-- **FlipBelt Product Intelligence**：产品、尺码、材料、跑步、品牌与内容审查等八项专家能力。需要员工本人连接 FlipBelt Knowledge。
+- **FlipBelt Product Intelligence**：产品、尺码、材料、跑步、品牌与内容审查等八项专家能力；Review 支持线框图、详情页文案和尺码表的当前 release 四状态审查。需要员工本人连接 FlipBelt Knowledge。
 - **FlipBelt 颜色命名**：为商品色卡、色彩企划与系列主题生成或审核中文颜色名。
 - **无缝图案设计**：设计、修改、提示和分级验证四方连续纹样。
 
