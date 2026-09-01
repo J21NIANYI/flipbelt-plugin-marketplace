@@ -99,7 +99,7 @@ def main() -> int:
     if product_manifest.get("apps") != "./.app.json":
         errors.append("flipbelt-product-intelligence: .app.json must be referenced")
     app = app_manifest.get("apps", {}).get("flipbelt-knowledge", {})
-    if app.get("id") != "asdk_app_6a8fef8bdfb081919d76e5309e0b32af":
+    if app.get("id") != "asdk_app_6a96a5e762008191a4ec2f8b129cc671":
         errors.append("flipbelt-product-intelligence: invalid Workspace App reference")
 
     for path in ROOT.rglob("*"):
