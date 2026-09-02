@@ -26,3 +26,4 @@ $results = @(
 
 $results | Format-Table -AutoSize
 Write-Output "PUBLIC REVIEW PARITY PASSED: cases=$($results.Count)"
+exit 0

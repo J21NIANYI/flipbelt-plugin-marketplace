@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "role": "downstream-public-distribution",
+  "canonical_repository": "flipbelt-product-intelligence (local-only)",
+  "canonical_version": "0.2.1",
+  "canonical_commit": "5eaf3f988d491e378cfe97ba5bad1a69ce80e09b",
+  "target_plugin": "flipbelt-product-intelligence",
+  "synced_paths": ["shared", "skills"],
+  "synced_file_count": 46,
+  "synced_tree_sha256": "ef3bf7b55b8a25d29d91c5572cf964a98d0138a20b4bcb766096007e9c984dec",
+  "allowed_differences": [
+    "plugin name and distribution semantic version",
+    "team Workspace .app.json and App reference",
+    "Marketplace manifest and public installation documentation",
+    "distribution validation and synthetic test adapters"
+  ]
+}

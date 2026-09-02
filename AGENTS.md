@@ -6,4 +6,6 @@
 - Keep `.agents/plugins/marketplace.json` as the marketplace source of truth.
 - Every plugin must retain `.codex-plugin/plugin.json`; every skill must retain `SKILL.md`.
 - Use strict semantic versions and review repository changes before merging because Workspace sync imports updates automatically.
+- Treat the local-only `flipbelt-product-intelligence` repository as the sole editable source for Product Intelligence `shared/` and `skills/`. This public repository is a downstream distribution and must record the canonical source commit in `SOURCE-PROVENANCE.json`.
+- Preserve the team-only plugin name, semantic version, `.app.json`, Workspace App reference, Marketplace manifest, public documentation, and validation adapters. Do not copy from the personal Marketplace or develop expert behavior directly here.
 - Run `python scripts/validate_marketplace.py`, the official plugin validator for all three plugins, and Skill quick validation before pushing.

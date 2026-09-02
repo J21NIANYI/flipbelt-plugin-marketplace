@@ -2,12 +2,14 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MARKETPLACE = ROOT / ".agents" / "plugins" / "marketplace.json"
+PROVENANCE = ROOT / "SOURCE-PROVENANCE.json"
 EXPECTED = {
     "flipbelt-product-intelligence": 8,
     "flipbelt-color-naming": 1,
@@ -33,9 +35,23 @@ def load_json(path: Path, errors: list[str]) -> dict:
     return value
 
 
+def synced_tree_sha256(plugin: Path) -> tuple[int, str]:
+    files = sorted(
+        (path for area in ("shared", "skills") for path in (plugin / area).rglob("*") if path.is_file()),
+        key=lambda path: path.relative_to(plugin).as_posix(),
+    )
+    digest = hashlib.sha256()
+    for path in files:
+        relative = path.relative_to(plugin).as_posix()
+        file_hash = hashlib.sha256(path.read_bytes()).hexdigest()
+        digest.update(f"{relative}\0{file_hash}\n".encode())
+    return len(files), digest.hexdigest()
+
+
 def main() -> int:
     errors: list[str] = []
     marketplace = load_json(MARKETPLACE, errors)
+    provenance = load_json(PROVENANCE, errors)
     if marketplace.get("name") != "flipbelt-team":
         errors.append("marketplace name must be flipbelt-team")
 
@@ -94,6 +110,24 @@ def main() -> int:
                 errors.append(f"{skill.relative_to(ROOT)}: frontmatter name mismatch")
 
     product = ROOT / "plugins" / "flipbelt-product-intelligence"
+    source_commit = provenance.get("canonical_commit")
+    if provenance.get("role") != "downstream-public-distribution":
+        errors.append("SOURCE-PROVENANCE.json: invalid distribution role")
+    if provenance.get("canonical_repository") != "flipbelt-product-intelligence (local-only)":
+        errors.append("SOURCE-PROVENANCE.json: invalid canonical repository")
+    if not isinstance(source_commit, str) or not re.fullmatch(r"[0-9a-f]{40}", source_commit):
+        errors.append("SOURCE-PROVENANCE.json: canonical_commit must be a full Git SHA")
+    if provenance.get("canonical_version") != "0.2.1":
+        errors.append("SOURCE-PROVENANCE.json: unexpected canonical version")
+    if provenance.get("target_plugin") != "flipbelt-product-intelligence":
+        errors.append("SOURCE-PROVENANCE.json: target plugin mismatch")
+    if provenance.get("synced_paths") != ["shared", "skills"]:
+        errors.append("SOURCE-PROVENANCE.json: synced paths mismatch")
+    file_count, tree_hash = synced_tree_sha256(product)
+    if provenance.get("synced_file_count") != file_count:
+        errors.append("SOURCE-PROVENANCE.json: synced file count mismatch")
+    if provenance.get("synced_tree_sha256") != tree_hash:
+        errors.append("SOURCE-PROVENANCE.json: synced tree SHA-256 mismatch")
     product_manifest = load_json(product / ".codex-plugin" / "plugin.json", errors)
     app_manifest = load_json(product / ".app.json", errors)
     if product_manifest.get("apps") != "./.app.json":

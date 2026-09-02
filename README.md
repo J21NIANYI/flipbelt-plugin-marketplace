@@ -33,3 +33,7 @@ FlipBelt 员工使用的 ChatGPT 与 Codex 插件分发仓库。仓库保持公�
 - 本仓库不包含知识平台源码、产品知识正文、员工数据、Cookie、Token、密钥、部署脚本或认证配置。
 - Product Intelligence 只引用现有 Workspace App；每位员工仍需独立完成 OAuth。
 - 所有产品事实仍由 FlipBelt Knowledge 的当前发布版本提供，插件文件本身不是产品事实源。
+
+## 来源基线
+
+Product Intelligence 的 `shared/` 与 `skills/` 从本地唯一真源 `flipbelt-product-intelligence@5eaf3f988d491e378cfe97ba5bad1a69ce80e09b` 单向同步，源版本为 `0.2.1`。本仓只保留团队插件名、分发 SemVer、Workspace `.app.json`、Marketplace 清单、公开说明和验证适配；完整来源与同步树摘要见 `SOURCE-PROVENANCE.json`。

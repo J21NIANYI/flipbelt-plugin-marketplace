@@ -6,6 +6,7 @@
 - Preserve `PASS`, `FAIL`, `MISSING`, and `NO-SOURCE` findings, evidence, corrections, counts, and non-final approval boundaries.
 - Add deterministic PowerShell 7 size-chart comparison with synthetic behavior tests.
 - Fail closed on incomplete read-only knowledge tools, authentication/service failures, unavailable pages, or cross-release evidence.
+- Record the local canonical source commit and byte-identical `shared/` and `skills/` distribution digest.
 
 ## 1.0.1 - 2026-09-01
 
