@@ -1,5 +1,12 @@
 # Changelog
 
+## Editorial Office 1.0.0 - 2026-10-10
+
+- Add the eight-role FlipBelt Editorial Office plugin to the team marketplace.
+- Reference the existing FlipBelt Knowledge Workspace App with per-member authorization.
+- Preserve canonical role and domain guidance; adapt local paths and cloud handoff, exclude internal term snapshots and privileged HTTP helpers, and record reproducible source hashes.
+- Validate all four marketplace entries, 18 skills, editorial dependency links, and distribution contracts without changing existing plugins.
+
 ## 1.1.0 - 2026-09-01
 
 - Add current-release review workflows for detail-page wireframes, copy, and size charts.

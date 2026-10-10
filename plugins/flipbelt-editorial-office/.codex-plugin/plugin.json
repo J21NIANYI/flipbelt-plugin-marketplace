@@ -1,0 +1,23 @@
+{
+  "name": "flipbelt-editorial-office",
+  "version": "1.0.0",
+  "description": "飞比特知识库编辑部：产品、尺码、扩展、专栏、关系、独立审校与交付，通过当前知识库制作受控修改与发布材料。",
+  "author": { "name": "FlipBelt" },
+  "repository": "https://github.com/J21NIANYI/flipbelt-plugin-marketplace",
+  "license": "Proprietary",
+  "skills": "./skills/",
+  "apps": "./.app.json",
+  "interface": {
+    "displayName": "飞比特知识库编辑部",
+    "shortDescription": "受控知识写作、关系治理与独立审校",
+    "longDescription": "八项编辑职责核对当前知识及用户资料，逐页准备修改单、草稿、HTML文章和独立审校报告。复用现有FlipBelt Knowledge连接；本地编辑需实际工作区，正式发布由授权管理员完成。",
+    "developerName": "FlipBelt",
+    "category": "Productivity",
+    "capabilities": ["Read"],
+    "defaultPrompt": "使用 $flipbelt-editorial-office:flipbelt-editorial-chief 处理本次知识编辑任务。",
+    "composerIcon": "./assets/flipbelt-editorial-owl.png",
+    "logo": "./assets/flipbelt-editorial-owl.png",
+    "logoDark": "./assets/flipbelt-editorial-owl.png",
+    "brandColor": "#168653"
+  }
+}

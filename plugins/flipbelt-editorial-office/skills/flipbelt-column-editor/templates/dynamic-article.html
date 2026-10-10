@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script type="application/json" id="fbkb-page">
+{
+  "object_type":"page","schema_version":"2.0","page_id":"page_replace_with_stable_id","page_type":"column","content_version":"1.0",
+  "title":"待完善主题","primary_entity_id":"entity_replace_with_verified_id","publish_status":"draft","knowledge_status":"pending_content",
+  "visibility":{"level":"internal","allowed_organizations":[]},"aliases":[],"last_reviewed":"2026-09-29","provenance":{"sources":[]},
+  "sections":[{"section_id":"section_overview","section_type":"overview","heading":"主题说明","ordinal":0,"knowledge_status":"pending_content","markdown":"请逐段替换为经核对的正文。\n\n互动提供简要与完整两种阅读状态；此模板不含产品事实或实测数据。"}],
+  "references":[],"assets":[]
+}
+</script>
+<style>
+article{font-family:system-ui,"Microsoft YaHei",sans-serif;color:#171c19;line-height:1.85;margin:0 auto;max-width:72ch;padding:24px 20px}
+h2{font-size:1.65rem;line-height:1.35;margin:0 0 24px}p.article-paragraph{text-indent:2em;margin:1em 0}
+.component{padding:24px;border:1px solid #d9ddd8;margin:28px 0}.component p{margin:.8em 0}
+.controls{display:flex;gap:10px;flex-wrap:wrap}button{font:inherit;background:white;border:1px solid #969d94;padding:10px 18px;cursor:pointer}
+button[aria-pressed="true"]{background:#e3ff50;color:#12180a}button:focus-visible{outline:3px solid #176b53;outline-offset:3px}[hidden]{display:none!important}
+.caption{color:#586056;font-size:.85rem}@media(max-width:480px){article{padding:20px 12px}.component{padding:16px}h2{font-size:1.4rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<article data-fbkb-article>
+<section id="section_overview">
+<h2>主题说明</h2>
+<p class="article-paragraph">请逐段替换为经核对的正文。</p>
+<div class="component" aria-label="阅读状态示例">
+<div class="controls" role="group" aria-label="选择阅读状态">
+<button type="button" aria-pressed="true" data-view="brief">简要说明</button>
+<button type="button" aria-pressed="false" data-view="full">完整说明</button>
+</div>
+<p data-panel="brief">此模板不含产品事实或实测数据。</p>
+<p data-panel="full" hidden>互动提供简要与完整两种阅读状态；此模板不含产品事实或实测数据。</p>
+<p class="caption">模板待完善；用真实稳定 ID、来源与正文替换后再审校。</p>
+</div>
+<noscript><p class="caption">互动提供简要与完整两种阅读状态；此模板不含产品事实或实测数据。</p></noscript>
+</section>
+</article>
+<script>
+(()=>{const article=document.querySelector('article[data-fbkb-article]');article.querySelectorAll('[data-view]').forEach(button=>button.addEventListener('click',()=>{const view=button.dataset.view;article.querySelectorAll('[data-view]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));article.querySelectorAll('[data-panel]').forEach(panel=>{panel.hidden=panel.dataset.panel!==view;});}));})();
+</script>
+</body>
+</html>

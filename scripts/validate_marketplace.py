@@ -14,13 +14,14 @@ EXPECTED = {
     "flipbelt-product-intelligence": 8,
     "flipbelt-color-naming": 1,
     "design-seamless-patterns": 1,
+    "flipbelt-editorial-office": 8,
 }
 SEMVER = re.compile(r"^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$")
 SECRET = re.compile(
     r"(?i)(access[_-]?key|client[_-]?secret|private[_-]?key|password)\s*[:=]\s*[\"']?[a-z0-9+/_.-]{12,}"
     r"|bearer\s+[a-z0-9._-]{20,}"
 )
-ABSOLUTE_PATH = re.compile(r"(?i)(?:[a-z]:\\users\\|/users/|/home/)")
+ABSOLUTE_PATH = re.compile(r"(?i)(?:\b[a-z]:[\\/]|/users/|/home/)")
 
 
 def load_json(path: Path, errors: list[str]) -> dict:
@@ -46,6 +47,89 @@ def synced_tree_sha256(plugin: Path) -> tuple[int, str]:
         file_hash = hashlib.sha256(path.read_bytes()).hexdigest()
         digest.update(f"{relative}\0{file_hash}\n".encode())
     return len(files), digest.hexdigest()
+
+
+def file_hashes(root: Path) -> dict[str, str]:
+    return {path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in sorted(root.rglob("*")) if path.is_file() and "__pycache__" not in path.parts}
+
+
+def tree_sha256(files: dict[str, str]) -> str:
+    digest = hashlib.sha256()
+    for relative, file_hash in sorted(files.items()):
+        digest.update(f"{relative}\0{file_hash}\n".encode())
+    return digest.hexdigest()
+
+
+def validate_editorial(errors: list[str]) -> None:
+    from sync_editorial import ADAPTERS, CONTRACT, NAMES, PROVENANCE, generated
+
+    plugin = ROOT / "plugins" / "flipbelt-editorial-office"
+    provenance = load_json(plugin / PROVENANCE, errors)
+    actual = file_hashes(plugin)
+    actual.pop(PROVENANCE, None)
+    if provenance.get("role") != "downstream-public-distribution":
+        errors.append("editorial: missing downstream provenance role")
+    if provenance.get("target_plugin") != "flipbelt-editorial-office":
+        errors.append("editorial: provenance target mismatch")
+    if not provenance.get("canonical_version") or not re.fullmatch(r"[0-9a-f]{64}", str(provenance.get("canonical_tree_sha256", ""))):
+        errors.append("editorial: missing canonical snapshot version or digest")
+    if provenance.get("distribution_files") != actual or provenance.get("distribution_tree_sha256") != tree_sha256(actual):
+        errors.append("editorial: distributed files or tree digest mismatch")
+    copied = provenance.get("copied_files", {})
+    if not isinstance(copied, dict):
+        copied = {}
+        errors.append("editorial: copied_files must be an object")
+    for relative, digest in copied.items():
+        if actual.get(relative) != digest:
+            errors.append(f"editorial: canonical copy changed: {relative}")
+    for name in NAMES:
+        if f"skills/{name}/SKILL.md" not in copied:
+            errors.append(f"editorial: role entry must remain a canonical copy: {name}")
+    adapted = provenance.get("adapted_source_files", {})
+    if not isinstance(adapted, dict) or set(adapted) != set(ADAPTERS):
+        errors.append("editorial: reviewed adapter list mismatch")
+    expected_copied = {relative for relative in actual
+                       if relative.startswith(("skills/", "assets/"))
+                       and relative not in ADAPTERS and not generated(relative)}
+    if set(copied) != expected_copied:
+        errors.append("editorial: unrecorded or unexpected canonical copy")
+    if any("/term-library-" in relative or "/scripts/" in relative for relative in actual):
+        errors.append("editorial: internal term snapshots or privileged helpers distributed")
+
+    skill_hashes = {relative.removeprefix("skills/"): digest
+                    for relative, digest in actual.items() if relative.startswith("skills/")}
+    source_manifest = load_json(plugin / "source-manifest.json", errors)
+    contract = load_json(plugin / CONTRACT, errors)
+    if source_manifest.get("skills") != NAMES or source_manifest.get("files") != skill_hashes:
+        errors.append("editorial: source-manifest integrity mismatch")
+    contract_hashes = dict(skill_hashes)
+    contract_hashes.pop(CONTRACT.removeprefix("skills/"), None)
+    if contract.get("skills") != NAMES or contract.get("files") != contract_hashes:
+        errors.append("editorial: editorial-contract integrity mismatch")
+    for name in NAMES:
+        link = load_json(plugin / f"skills/{name}/editorial-link.json", errors)
+        if link != {"contract": "../flipbelt-editorial-chief/editorial-contract.json",
+                    "entry_sha256": skill_hashes.get(f"{name}/SKILL.md")}:
+            errors.append(f"editorial: invalid role contract link: {name}")
+    for path in (plugin / "skills").rglob("*.md"):
+        for target in re.findall(r"\[[^\]]*\]\(([^)]+)\)", path.read_text(encoding="utf-8")):
+            target = target.split("#", 1)[0].strip("<>")
+            if not target or re.match(r"^[a-zA-Z]+:", target):
+                continue
+            resolved = (path.parent / target).resolve()
+            if not resolved.is_relative_to(plugin.resolve()) or not resolved.is_file():
+                errors.append(f"{path.relative_to(ROOT)}: missing or escaping dependency: {target}")
+    manifest = load_json(plugin / ".codex-plugin/plugin.json", errors)
+    app_manifest = load_json(plugin / ".app.json", errors)
+    app = app_manifest.get("apps", {}).get("flipbelt-knowledge", {})
+    if manifest.get("apps") != "./.app.json" or app.get("id") != "asdk_app_6a96a5e762008191a4ec2f8b129cc671" or app.get("required") is not True:
+        errors.append("editorial: existing required Workspace App must be referenced")
+    for key in ("logo", "logoDark", "composerIcon"):
+        icon = manifest.get("interface", {}).get(key)
+        path = plugin / str(icon)
+        if icon != "./assets/flipbelt-editorial-owl.png" or not path.is_file() or not path.read_bytes().startswith(b"\x89PNG\r\n\x1a\n"):
+            errors.append(f"editorial: invalid {key}")
 
 
 def main() -> int:
@@ -148,8 +232,10 @@ def main() -> int:
         if marker not in review_text:
             errors.append(f"flipbelt-product-intelligence: Review Specialist missing contract marker {marker}")
 
+    validate_editorial(errors)
+
     for path in ROOT.rglob("*"):
-        if not path.is_file() or ".git" in path.parts or path.suffix.lower() == ".png":
+        if not path.is_file() or any(part in path.parts for part in (".git", ".tmp", "__pycache__")) or path.suffix.lower() == ".png":
             continue
         try:
             text = path.read_text(encoding="utf-8")
@@ -172,7 +258,7 @@ def main() -> int:
             print(f"- {error}")
         return 1
 
-    print("MARKETPLACE VALIDATION PASSED: plugins=3 skills=10 bundled_mcp=0 required_apps=1")
+    print(f"MARKETPLACE VALIDATION PASSED: plugins={len(EXPECTED)} skills={sum(EXPECTED.values())} bundled_mcp=0 app_backed_plugins=2 shared_apps=1")
     return 0
 
 
