@@ -19,6 +19,8 @@ jobs:
           python-version: "3.12"
       - name: Validate marketplace structure and public boundary
         run: python scripts/validate_marketplace.py
+      - name: Validate editorial distribution safety
+        run: python -m unittest discover -s tests -p test_editorial_distribution.py -v
       - name: Validate deterministic Review size-chart behavior
         shell: pwsh
         run: ./scripts/test_review_parity.ps1
