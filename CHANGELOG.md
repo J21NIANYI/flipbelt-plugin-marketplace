@@ -1,5 +1,12 @@
 # Changelog
 
+## AI Asset Center 0.1.0 - 2026-10-15
+
+- Add the registrar and workflow incubator as one AI Asset Center plugin.
+- Distribute Skills and separate Windows local 16-tool stdio connector instructions; do not invent an asset Workspace App or remote MCP endpoint.
+- Record per-plugin source and distribution hashes; keep cloud asset connectivity and real business acceptance pending.
+- Preserve the existing four plugin distributions and their connection rules.
+
 ## Editorial Office 1.0.0 - 2026-10-10
 
 - Add the eight-role FlipBelt Editorial Office plugin to the team marketplace.

@@ -15,6 +15,7 @@ EXPECTED = {
     "flipbelt-color-naming": 1,
     "design-seamless-patterns": 1,
     "flipbelt-editorial-office": 8,
+    "flipbelt-ai-asset-center": 2,
 }
 SEMVER = re.compile(r"^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$")
 SECRET = re.compile(
@@ -132,6 +133,93 @@ def validate_editorial(errors: list[str]) -> None:
             errors.append(f"editorial: invalid {key}")
 
 
+AI_ASSET_NAME = "flipbelt-ai-asset-center"
+
+AI_ASSET_SKILLS = {
+    "flipbelt-ai-asset-registrar",
+    "flipbelt-ai-workflow-incubator",
+}
+
+
+def validate_ai_asset(errors: list[str]) -> None:
+    plugin = ROOT / "plugins" / AI_ASSET_NAME
+    manifest = load_json(plugin / ".codex-plugin/plugin.json", errors)
+    provenance = load_json(plugin / "SOURCE-PROVENANCE.json", errors)
+    if manifest.get("name") != AI_ASSET_NAME or manifest.get("version") != "0.1.0":
+        errors.append("ai-asset: plugin name or version mismatch")
+    for key in ("description", "author", "interface"):
+        if not manifest.get(key):
+            errors.append(f"ai-asset: missing manifest field {key}")
+    if manifest.get("skills") != "./skills/":
+        errors.append("ai-asset: skills path must be ./skills/")
+    if any(key in manifest for key in ("apps", "mcpServers")):
+        errors.append("ai-asset: connection dependencies must not be bundled")
+
+    skill_files = {f"skills/{name}/{relative}"
+                   for name in AI_ASSET_SKILLS
+                   for relative in ("SKILL.md", "references/CONNECTOR.md", "references/PILOT.md")}
+    allowed_files = skill_files | {
+        ".codex-plugin/plugin.json", "README.md", "CONNECTORS.md", "SOURCE-PROVENANCE.json",
+    }
+    actual = {}
+    for path in sorted(plugin.rglob("*")):
+        relative = path.relative_to(plugin).as_posix()
+        if path.is_symlink():
+            errors.append(f"ai-asset: symlink is forbidden: {relative}")
+            continue
+        if not path.is_file():
+            continue
+        actual[relative] = hashlib.sha256(path.read_bytes()).hexdigest()
+        if relative not in allowed_files:
+            errors.append(f"ai-asset: unexpected distribution file: {relative}")
+        try:
+            text = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            errors.append(f"ai-asset: binary file is forbidden: {relative}")
+            continue
+        if SECRET.search(text):
+            errors.append(f"ai-asset: possible secret pattern: {relative}")
+        if re.search(r"(?i)(?:\b[a-z]:[\\/]|/users/|/home/)", text):
+            errors.append(f"ai-asset: local absolute path is forbidden: {relative}")
+        if "asdk_app_" in text:
+            errors.append(f"ai-asset: Workspace App ID is forbidden: {relative}")
+    if set(actual) != allowed_files:
+        errors.append("ai-asset: exact two-Skill distribution file set mismatch")
+    for name in AI_ASSET_SKILLS:
+        entry = plugin / "skills" / name / "SKILL.md"
+        if entry.is_file() and not re.search(
+                rf"(?m)^name:\s*{re.escape(name)}\s*$", entry.read_text(encoding="utf-8")):
+            errors.append(f"ai-asset: Skill frontmatter name mismatch: {name}")
+    connection = plugin / "CONNECTORS.md"
+    if connection.is_file():
+        text = connection.read_text(encoding="utf-8").lower()
+        if any(marker not in text for marker in ("windows", "stdio", "16")):
+            errors.append("ai-asset: missing local connector dependency description")
+
+    if provenance.get("schema_version") != "1.0" or provenance.get("role") != "downstream-distribution":
+        errors.append("ai-asset: provenance schema or role mismatch")
+    if provenance.get("canonical_repository") != "flipbelt-ai-asset-center":
+        errors.append("ai-asset: canonical repository mismatch")
+    if not re.fullmatch(r"[0-9a-f]{40}", str(provenance.get("canonical_commit", ""))):
+        errors.append("ai-asset: canonical commit must be a full Git SHA")
+    if provenance.get("canonical_version") != "0.1.0" or provenance.get("target_plugin") != AI_ASSET_NAME:
+        errors.append("ai-asset: provenance version or target mismatch")
+    if provenance.get("synced_paths") != ["skills"]:
+        errors.append("ai-asset: synced paths mismatch")
+    if not isinstance(provenance.get("canonical_worktree_dirty"), bool):
+        errors.append("ai-asset: canonical worktree state is required")
+    if not re.fullmatch(r"[0-9a-f]{64}", str(provenance.get("source_tree_sha256", ""))):
+        errors.append("ai-asset: source tree SHA-256 is required")
+    copied = {relative: digest for relative, digest in actual.items() if relative in skill_files}
+    if provenance.get("copied_files") != copied:
+        errors.append("ai-asset: copied Skill hashes mismatch")
+    distribution = {relative: digest for relative, digest in actual.items()
+                    if relative != "SOURCE-PROVENANCE.json"}
+    if (provenance.get("distribution_files") != distribution
+            or provenance.get("distribution_tree_sha256") != tree_sha256(distribution)):
+        errors.append("ai-asset: distribution file or tree hashes mismatch")
+
+
 def main() -> int:
     errors: list[str] = []
     marketplace = load_json(MARKETPLACE, errors)
@@ -233,6 +321,7 @@ def main() -> int:
             errors.append(f"flipbelt-product-intelligence: Review Specialist missing contract marker {marker}")
 
     validate_editorial(errors)
+    validate_ai_asset(errors)
 
     for path in ROOT.rglob("*"):
         if not path.is_file() or any(part in path.parts for part in (".git", ".tmp", "__pycache__")) or path.suffix.lower() == ".png":

@@ -1,0 +1,32 @@
+{
+  "author": {
+    "name": "FlipBelt"
+  },
+  "description": "Explore AI workflows and register existing outcomes with user-controlled local drafts and an independently configured restricted connector.",
+  "interface": {
+    "capabilities": [
+      "workflow-incubation",
+      "asset-registration"
+    ],
+    "category": "Productivity",
+    "defaultPrompt": [
+      "帮我梳理这项重复工作，给出可试方案。",
+      "整理当前项目成果卡，先保留本地草稿。"
+    ],
+    "developerName": "FlipBelt",
+    "displayName": "飞比特 AI 成果助手",
+    "longDescription": "以孵化器梳理工作机会，以登记器整理已有成果；默认本地，连接正式中心后通过本人授权和网页确切版本确认完成登记。连接器需独立配置。",
+    "shortDescription": "工作机会孵化与已有成果登记，连接器独立授权。"
+  },
+  "keywords": [
+    "flipbelt",
+    "ai-assets",
+    "incubation",
+    "registration"
+  ],
+  "license": "Proprietary",
+  "name": "flipbelt-ai-asset-center",
+  "repository": "https://github.com/J21NIANYI/flipbelt-plugin-marketplace",
+  "skills": "./skills/",
+  "version": "0.1.0"
+}
