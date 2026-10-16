@@ -4,7 +4,7 @@
     "profile notice",
     "workspace-app-candidate"
   ],
-  "canonical_commit": "a160657200a93f05050d5c69d31ff7d0f966a448",
+  "canonical_commit": "ed0c4039fb23ad33c5796f0dbeb8afb25af4b792",
   "canonical_project": "flipbelt-ai-asset-center",
   "canonical_repository": "https://github.com/FlipBelt/Digital-Asset-Management-Space",
   "canonical_version": "0.2.0",
@@ -19,7 +19,7 @@
     "skills/flipbelt-ai-workflow-incubator/references/PILOT.md": "2990b9479e16d976dc0dfc13377b611c89bca4989480df87d15cd3ad6352f5f2"
   },
   "distribution_files": {
-    ".app.json": "a8fda686118024b925dd047d9de4540cc056a0be24befda6c465dcd8cd2d1cfe",
+    ".app.json": "cc4a7641c3d6007bc0014862921fdde2f7631543fb8845cd7c477eed11538088",
     ".codex-plugin/plugin.json": "c811e816c542580c51d0a039f296130b46a2f9024aecb49621b214d09df385dc",
     "CONNECTORS.md": "cfba130f0902524e47745513ebc6d0e7480d9e474c26b697e4eb6d3594266d3f",
     "README.md": "86be67c7018fb5652469d22904da9bf426bb7993dcb737574806d5c30bdd2934",
@@ -30,7 +30,7 @@
     "skills/flipbelt-ai-workflow-incubator/references/CONNECTOR.md": "7f1ad59ff6e4260c223d6b3447acdf49a21700758b955b044d465cb1dce15be7",
     "skills/flipbelt-ai-workflow-incubator/references/PILOT.md": "2990b9479e16d976dc0dfc13377b611c89bca4989480df87d15cd3ad6352f5f2"
   },
-  "distribution_tree_sha256": "bbc6de78509d5e142a7ec53234f8b43a6c6d30af2384c3a15f043d61f3a7f1a7",
+  "distribution_tree_sha256": "bc858aedc0f35d98467571e16c0670530743f1d312842d8ce62495d55545960a",
   "exclusions": [
     "credentials",
     "virtual environments",
@@ -62,5 +62,5 @@
   "target_host": "team",
   "target_plugin": "flipbelt-ai-asset-center",
   "workspace_app_binding_verified": false,
-  "workspace_app_id": "asdk_app_6ad1a995522c819197dd69e6aca6f71f"
+  "workspace_app_id": "asdk_app_6ad1de5fb8788191b73c1aaab021a067"
 }

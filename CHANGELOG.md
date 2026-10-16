@@ -1,6 +1,14 @@
 # Changelog
 
-## AI Asset Center 0.2.0 - 2026-10-16
+## AI Asset Center 0.2.0 App dependency replacement - 2026-10-16
+
+- Replace the required asset App using the generated declaration and provenance from clean canonical commit `ed0c4039fb23ad33c5796f0dbeb8afb25af4b792`; preserve version 0.2.0 and record the dependency change through the marketplace revision.
+- Keep all nine source files and six Skill copies unchanged; preserve the other four plugins, Knowledge App references, marketplace manifest, and validation rules.
+- Record the new App's connected 13-tool directory and independent admin-page confirmation of publication, enabled status, and workspace-wide availability; newly added tools remain disabled by default.
+- Leave wrapper dependency refresh, marketplace synchronization, new host calls, other employee installation, and business UAT pending. Keep the three verification fields false.
+- Retain the previous App's OAuth and read-only call results below as historical evidence, without attributing them to the new App.
+
+## AI Asset Center 0.2.0 initial App reference - 2026-10-16
 
 - Prepare the two-Skill distribution from clean canonical commit `a160657200a93f05050d5c69d31ff7d0f966a448`.
 - Reference the independently registered asset App as required, with the same normalized ID in provenance; do not bundle direct MCP configuration, connector/backend source, or credentials.

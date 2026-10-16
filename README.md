@@ -14,9 +14,11 @@ FlipBelt 员工使用的 ChatGPT 与 Codex 插件分发仓库。仓库保持公�
 
 `flipbelt-ai-asset-center` **0.2.0** 包含登记器与孵化器两项 Skills，通过 [必需 App 声明](plugins/flipbelt-ai-asset-center/.app.json) 引用独立注册的资产 App；manifest 的 apps 指向该文件，团队包不携带直接 MCP 配置。资产服务入口为 `https://jtzhzt.flipbeltchina.com/mcp`，实现提供 13 种业务工具，实际可见目录由本人授权 scope 决定。具体边界见 [CONNECTORS.md](plugins/flipbelt-ai-asset-center/CONNECTORS.md)。
 
-资产 App 已真实创建，与只读 FlipBelt Knowledge App 分开。本人 OAuth 已完成，当前账号在 ChatGPT Work 新聊天中的一次 `get_capabilities` 只读调用成功，返回远程工具总数 13 与四项业务 scope。工作空间目录发布、其他员工安装和业务 UAT 仍待核验；该结果仅覆盖当前账号的授权与能力回读。市场收录、App 引用和静态校验均不授予其他员工业务访问权限。缺少工具或授权失败时继续整理私有材料，不能声称已经保存或登记。
+本次将必需依赖替换为新的团队资产 App，与只读 FlipBelt Knowledge App 分开。新 App 已完成连接，后台列出13种工具；管理员按用户确认发布后，已在独立页面重载回读“已启用”“适用于此工作空间中的所有人”及“可用”选中状态，新增工具默认禁用。上述结果确认 App 的管理配置，插件 wrapper 依赖更新、市场同步、新宿主调用、其他员工安装和业务 UAT 仍待验收。
 
-两项 Skill 从 AI 资产中心项目的干净提交 [a160657](https://github.com/FlipBelt/Digital-Asset-Management-Space/tree/a160657200a93f05050d5c69d31ff7d0f966a448) 单向生成；九个来源文件与六个技能复制摘要、真实 App 引用和候选连接状态见插件自己的 [SOURCE-PROVENANCE.json](plugins/flipbelt-ai-asset-center/SOURCE-PROVENANCE.json)。三个 verification 字段保持 false，不将分发配置当作运行验收。本仓不保存连接器实现、后端源码或凭据。
+前一市场 revision 使用的旧 App 曾完成本人 OAuth，以及当前账号在 ChatGPT Work 新聊天中的一次 `get_capabilities` 只读调用；该记录仅作为旧 App 历史，不能转作新 App 的宿主验收。市场收录、App 引用和静态校验不替代员工本人授权。缺少工具或授权失败时继续整理私有材料，不能声称已经保存或登记。
+
+两项 Skill 从 AI 资产中心项目的干净提交 [ed0c403](https://github.com/FlipBelt/Digital-Asset-Management-Space/tree/ed0c4039fb23ad33c5796f0dbeb8afb25af4b792) 单向生成；九个来源文件与六个技能复制摘要、真实 App 引用和候选连接状态见插件自己的 [SOURCE-PROVENANCE.json](plugins/flipbelt-ai-asset-center/SOURCE-PROVENANCE.json)。三个 verification 字段保持 false，不将分发配置当作运行验收。本仓不保存连接器实现、后端源码或凭据。
 
 ## 员工安装
 
@@ -54,4 +56,4 @@ Product Intelligence 的 `shared/` 与 `skills/` 从本地唯一真源 `flipbelt
 
 编辑部团队版 `1.0.0` 从现有个人维护源 `flipbelt-editorial-office@0.1.0+codex.20260929070411` 单向分发。八项 Skill 入口及领域写作/审校规则保持原文；团队适配不包含内部术语库、本机凭据工具或历史发布快照。差异、来源哈希和更新方法见 [编辑部分发说明](plugins/flipbelt-editorial-office/README.md)。
 
-AI 资产中心 0.2.0 固定来源为 `a160657200a93f05050d5c69d31ff7d0f966a448`，两项 Skills 的六个文件逐字节复制，来源记录独立于其他插件。团队专属适配为必需资产 App 引用，保留既有四个插件及其 Knowledge 连接、来源和权限规则。
+AI 资产中心 0.2.0 本次固定来源为 `ed0c4039fb23ad33c5796f0dbeb8afb25af4b792`，九个源文件与前一分发的内容一致，两项 Skills 的六个文件逐字节复制。技能能力与插件版本保持不变，以市场 revision 标记必需 App 的替换；来源记录独立于其他插件。团队专属适配为必需资产 App 引用，保留既有四个插件及其 Knowledge 连接、来源和权限规则。
