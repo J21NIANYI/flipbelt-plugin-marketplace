@@ -14,7 +14,11 @@ FlipBelt 员工使用的 ChatGPT 与 Codex 插件分发仓库。仓库保持公�
 
 `flipbelt-ai-asset-center` **0.2.0** 包含登记器与孵化器两项 Skills，通过 [必需 App 声明](plugins/flipbelt-ai-asset-center/.app.json) 引用独立注册的资产 App；manifest 的 apps 指向该文件，团队包不携带直接 MCP 配置。资产服务入口为 `https://jtzhzt.flipbeltchina.com/mcp`，实现提供 13 种业务工具，实际可见目录由本人授权 scope 决定。具体边界见 [CONNECTORS.md](plugins/flipbelt-ai-asset-center/CONNECTORS.md)。
 
-本次将必需依赖替换为新的团队资产 App，与只读 FlipBelt Knowledge App 分开。新 App 已完成连接，后台列出13种工具；管理员按用户确认发布后，已在独立页面重载回读“已启用”“适用于此工作空间中的所有人”及“可用”选中状态，新增工具默认禁用。上述结果确认 App 的管理配置，插件 wrapper 依赖更新、市场同步、新宿主调用、其他员工安装和业务 UAT 仍待验收。
+本次将必需依赖替换为新的团队资产 App，与只读 FlipBelt Knowledge App 分开。新 App 已完成连接，后台列出13种工具；管理员按用户确认发布后，已在独立页面重载回读“已启用”“适用于此工作空间中的所有人”及“可用”选中状态，新增工具默认禁用。App 与插件 wrapper 的站点访客入口均已关闭，并重载确认持久化。
+
+团队市场已同步精确 revision [da7ab28](https://github.com/J21NIANYI/flipbelt-plugin-marketplace/commit/da7ab2884e77b1003f1b801eea39305f0431df3e)，结果为新增0、更新1、未变4、移除0、失败0。管理员重载确认 wrapper 已启用、面向目标工作空间所有人可用，含两项 Skills，并将新 App 标记为必需依赖。
+
+新 App 直接入口与更新后的 wrapper 新聊天分别完成一次只读 `get_capabilities` 宿主回读；wrapper 回读返回远程工具总数13、四项业务 scope 及网页确认策略 `web_only`。证据来自可见宿主回读，未导出原始服务 trace，未执行业务写入；这不代表13种工具逐一执行通过。其他员工仍须各自完成 OAuth，业务 UAT 尚未完成；千问测试按用户要求延期。
 
 前一市场 revision 使用的旧 App 曾完成本人 OAuth，以及当前账号在 ChatGPT Work 新聊天中的一次 `get_capabilities` 只读调用；该记录仅作为旧 App 历史，不能转作新 App 的宿主验收。市场收录、App 引用和静态校验不替代员工本人授权。缺少工具或授权失败时继续整理私有材料，不能声称已经保存或登记。
 

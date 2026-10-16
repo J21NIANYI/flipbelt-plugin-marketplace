@@ -5,7 +5,10 @@
 - Replace the required asset App using the generated declaration and provenance from clean canonical commit `ed0c4039fb23ad33c5796f0dbeb8afb25af4b792`; preserve version 0.2.0 and record the dependency change through the marketplace revision.
 - Keep all nine source files and six Skill copies unchanged; preserve the other four plugins, Knowledge App references, marketplace manifest, and validation rules.
 - Record the new App's connected 13-tool directory and independent admin-page confirmation of publication, enabled status, and workspace-wide availability; newly added tools remain disabled by default.
-- Leave wrapper dependency refresh, marketplace synchronization, new host calls, other employee installation, and business UAT pending. Keep the three verification fields false.
+- Synchronize exact marketplace revision `da7ab2884e77b1003f1b801eea39305f0431df3e`: 0 added, 1 updated, 4 unchanged, 0 removed, and 0 failed. Reload and confirm the enabled wrapper, workspace-wide availability, two Skills, and required new App.
+- Confirm persisted closure of site-visitor access for both App and wrapper.
+- Record one direct-App and one updated-wrapper `get_capabilities` host read. The wrapper result reports 13 remote tools, four business scopes, and `web_only` confirmation. No business writes were performed or raw service trace exported; the tool count does not represent 13 executed tool tests.
+- Leave each other employee's OAuth, installation, and business UAT pending; defer Qwen testing at the user's request. Keep the three verification fields false.
 - Retain the previous App's OAuth and read-only call results below as historical evidence, without attributing them to the new App.
 
 ## AI Asset Center 0.2.0 initial App reference - 2026-10-16
