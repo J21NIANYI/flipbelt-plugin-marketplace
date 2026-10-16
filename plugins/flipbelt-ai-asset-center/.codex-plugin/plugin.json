@@ -1,8 +1,9 @@
 {
+  "apps": "./.app.json",
   "author": {
     "name": "FlipBelt"
   },
-  "description": "Explore AI workflows and register existing outcomes with user-controlled local drafts and an independently configured restricted connector.",
+  "description": "Explore AI workflows and register outcomes with private drafts, host OAuth for remote MCP, and explicit web confirmation; remote distribution remains a candidate until verified.",
   "interface": {
     "capabilities": [
       "workflow-incubation",
@@ -15,7 +16,7 @@
     ],
     "developerName": "FlipBelt",
     "displayName": "飞比特 AI 成果助手",
-    "longDescription": "以孵化器梳理工作机会，以登记器整理已有成果；默认本地，连接正式中心后通过本人授权和网页确切版本确认完成登记。连接器需独立配置。",
+    "longDescription": "以孵化器梳理工作机会，以登记器整理已有成果；默认本地，远程候选通过宿主 OAuth 逐人授权，正式登记须本人网页确切版本确认。远程服务和宿主安装尚待验证。",
     "shortDescription": "工作机会孵化与已有成果登记，连接器独立授权。"
   },
   "keywords": [
@@ -28,5 +29,5 @@
   "name": "flipbelt-ai-asset-center",
   "repository": "https://github.com/J21NIANYI/flipbelt-plugin-marketplace",
   "skills": "./skills/",
-  "version": "0.1.0"
+  "version": "0.2.0"
 }

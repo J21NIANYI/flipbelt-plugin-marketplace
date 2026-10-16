@@ -54,6 +54,7 @@
     },
     {
       "name": "flipbelt-ai-asset-center",
+      "version": "0.2.0",
       "source": {
         "source": "local",
         "path": "./plugins/flipbelt-ai-asset-center"

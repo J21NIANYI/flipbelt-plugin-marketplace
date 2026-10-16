@@ -1,5 +1,13 @@
 # Changelog
 
+## AI Asset Center 0.2.0 - 2026-10-16
+
+- Prepare the two-Skill distribution from clean canonical commit `a160657200a93f05050d5c69d31ff7d0f966a448`.
+- Reference the independently registered asset App as required, with the same normalized ID in provenance; do not bundle direct MCP configuration, connector/backend source, or credentials.
+- Preserve the existing four plugin distributions, Knowledge App references, and canonical source records.
+- Record completed personal OAuth and one successful current-account `get_capabilities` read in a new ChatGPT Work chat, reporting 13 remote tools and four business scopes.
+- Leave workspace catalog publication, installation by other employees, and business UAT pending; keep the three verification fields false.
+
 ## AI Asset Center 0.1.0 - 2026-10-15
 
 - Add the registrar and workflow incubator as one AI Asset Center plugin.

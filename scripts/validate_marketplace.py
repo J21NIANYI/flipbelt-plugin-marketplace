@@ -134,6 +134,9 @@ def validate_editorial(errors: list[str]) -> None:
 
 
 AI_ASSET_NAME = "flipbelt-ai-asset-center"
+AI_ASSET_TARGET = "team"
+AI_ASSET_REMOTE_URL = "https://jtzhzt.flipbeltchina.com/mcp"
+AI_ASSET_KNOWLEDGE_APP_ID = "asdk_app_6a96a5e762008191a4ec2f8b129cc671"
 
 AI_ASSET_SKILLS = {
     "flipbelt-ai-asset-registrar",
@@ -145,15 +148,49 @@ def validate_ai_asset(errors: list[str]) -> None:
     plugin = ROOT / "plugins" / AI_ASSET_NAME
     manifest = load_json(plugin / ".codex-plugin/plugin.json", errors)
     provenance = load_json(plugin / "SOURCE-PROVENANCE.json", errors)
-    if manifest.get("name") != AI_ASSET_NAME or manifest.get("version") != "0.1.0":
+    version = manifest.get("version")
+    remote = version == "0.2.0"
+    if (manifest.get("name") != AI_ASSET_NAME or not isinstance(version, str)
+            or version not in {"0.1.0", "0.2.0"}):
         errors.append("ai-asset: plugin name or version mismatch")
     for key in ("description", "author", "interface"):
         if not manifest.get(key):
             errors.append(f"ai-asset: missing manifest field {key}")
     if manifest.get("skills") != "./skills/":
         errors.append("ai-asset: skills path must be ./skills/")
-    if any(key in manifest for key in ("apps", "mcpServers")):
-        errors.append("ai-asset: connection dependencies must not be bundled")
+
+    app_id = None
+    if not remote:
+        if any(key in manifest for key in ("apps", "mcpServers")):
+            errors.append("ai-asset: legacy connection dependencies must not be bundled")
+    elif AI_ASSET_TARGET == "team":
+        if manifest.get("apps") != "./.app.json" or "mcpServers" in manifest:
+            errors.append("ai-asset: remote team distribution requires only the Workspace App reference")
+        app_manifest = load_json(plugin / ".app.json", errors)
+        apps = app_manifest.get("apps")
+        entry = apps.get("flipbelt-ai-assets") if isinstance(apps, dict) else None
+        app_id = entry.get("id") if isinstance(entry, dict) else None
+        if (not isinstance(app_id, str) or len(app_id) > 200
+                or not re.fullmatch(r"asdk_app_[A-Za-z0-9][A-Za-z0-9_-]*", app_id)):
+            errors.append("ai-asset: a normalized asset Workspace App ID is required")
+        elif app_id == AI_ASSET_KNOWLEDGE_APP_ID:
+            errors.append("ai-asset: the read-only Knowledge App cannot bind the asset service")
+        if (app_manifest != {"apps": {"flipbelt-ai-assets": {"id": app_id, "required": True}}}
+                or not isinstance(entry, dict) or entry.get("required") is not True):
+            errors.append("ai-asset: the asset Workspace App must be the sole required App")
+    else:
+        if manifest.get("mcpServers") != "./.mcp.json" or "apps" in manifest:
+            errors.append("ai-asset: remote personal distribution requires only the MCP reference")
+        mcp = load_json(plugin / ".mcp.json", errors)
+        if mcp != {"mcpServers": {"flipbelt-ai-assets": {"type": "http", "url": AI_ASSET_REMOTE_URL}}}:
+            errors.append("ai-asset: only the exact public asset HTTP MCP without credentials is allowed")
+
+    if AI_ASSET_TARGET == "personal":
+        root_manifest = load_json(plugin / "plugin.json", errors)
+        if any(root_manifest.get(key) != manifest.get(key) for key in ("name", "version", "description")):
+            errors.append("ai-asset: standard discovery manifest identity mismatch")
+        if any(key in root_manifest for key in ("skills", "mcpServers", "apps", "interface", "policy")):
+            errors.append("ai-asset: standard discovery manifest contains host-specific fields")
 
     skill_files = {f"skills/{name}/{relative}"
                    for name in AI_ASSET_SKILLS
@@ -161,11 +198,15 @@ def validate_ai_asset(errors: list[str]) -> None:
     allowed_files = skill_files | {
         ".codex-plugin/plugin.json", "README.md", "CONNECTORS.md", "SOURCE-PROVENANCE.json",
     }
+    if AI_ASSET_TARGET == "personal":
+        allowed_files.add("plugin.json")
+    if remote:
+        allowed_files.add(".app.json" if AI_ASSET_TARGET == "team" else ".mcp.json")
     actual = {}
     for path in sorted(plugin.rglob("*")):
         relative = path.relative_to(plugin).as_posix()
-        if path.is_symlink():
-            errors.append(f"ai-asset: symlink is forbidden: {relative}")
+        if path.is_symlink() or getattr(path.lstat(), "st_file_attributes", 0) & 0x400:
+            errors.append(f"ai-asset: symlink or reparse point is forbidden: {relative}")
             continue
         if not path.is_file():
             continue
@@ -181,8 +222,16 @@ def validate_ai_asset(errors: list[str]) -> None:
             errors.append(f"ai-asset: possible secret pattern: {relative}")
         if re.search(r"(?i)(?:\b[a-z]:[\\/]|/users/|/home/)", text):
             errors.append(f"ai-asset: local absolute path is forbidden: {relative}")
-        if "asdk_app_" in text:
+        if not remote and "asdk_app_" in text:
             errors.append(f"ai-asset: Workspace App ID is forbidden: {relative}")
+        elif remote:
+            # Prefix examples with an ellipsis are documentation, not App references.
+            ids = re.findall(r"\b(?:plugin_)?asdk_app_[A-Za-z0-9][A-Za-z0-9_-]*\b", text)
+            allowed_ids = {app_id} if AI_ASSET_TARGET == "team" and isinstance(app_id, str) and relative in {
+                ".app.json", "SOURCE-PROVENANCE.json",
+            } else set()
+            if any(value not in allowed_ids for value in ids):
+                errors.append(f"ai-asset: unexpected Workspace App ID: {relative}")
     if set(actual) != allowed_files:
         errors.append("ai-asset: exact two-Skill distribution file set mismatch")
     for name in AI_ASSET_SKILLS:
@@ -193,16 +242,21 @@ def validate_ai_asset(errors: list[str]) -> None:
     connection = plugin / "CONNECTORS.md"
     if connection.is_file():
         text = connection.read_text(encoding="utf-8").lower()
-        if any(marker not in text for marker in ("windows", "stdio", "16")):
-            errors.append("ai-asset: missing local connector dependency description")
+        markers = ("oauth", "13", AI_ASSET_REMOTE_URL) if remote else ("windows", "stdio", "16")
+        if any(marker not in text for marker in markers):
+            errors.append("ai-asset: missing remote OAuth connection description" if remote
+                          else "ai-asset: missing local connector dependency description")
 
     if provenance.get("schema_version") != "1.0" or provenance.get("role") != "downstream-distribution":
         errors.append("ai-asset: provenance schema or role mismatch")
-    if provenance.get("canonical_repository") != "flipbelt-ai-asset-center":
+    expected_repository = ("https://github.com/FlipBelt/Digital-Asset-Management-Space" if remote
+                           else "flipbelt-ai-asset-center")
+    if (provenance.get("canonical_repository") != expected_repository
+            or remote and provenance.get("canonical_project") != "flipbelt-ai-asset-center"):
         errors.append("ai-asset: canonical repository mismatch")
     if not re.fullmatch(r"[0-9a-f]{40}", str(provenance.get("canonical_commit", ""))):
         errors.append("ai-asset: canonical commit must be a full Git SHA")
-    if provenance.get("canonical_version") != "0.1.0" or provenance.get("target_plugin") != AI_ASSET_NAME:
+    if provenance.get("canonical_version") != version or provenance.get("target_plugin") != AI_ASSET_NAME:
         errors.append("ai-asset: provenance version or target mismatch")
     if provenance.get("synced_paths") != ["skills"]:
         errors.append("ai-asset: synced paths mismatch")
@@ -213,6 +267,30 @@ def validate_ai_asset(errors: list[str]) -> None:
     copied = {relative: digest for relative, digest in actual.items() if relative in skill_files}
     if provenance.get("copied_files") != copied:
         errors.append("ai-asset: copied Skill hashes mismatch")
+    if remote:
+        expected_profile = "workspace-app-candidate" if AI_ASSET_TARGET == "team" else "remote-oauth-candidate"
+        if (provenance.get("target_host") != AI_ASSET_TARGET
+                or provenance.get("connection_profile") != expected_profile
+                or provenance.get("remote_mcp_url") != AI_ASSET_REMOTE_URL):
+            errors.append("ai-asset: remote profile or service provenance mismatch")
+        if "workspace_app_id" not in provenance or provenance.get("workspace_app_id") != app_id:
+            errors.append("ai-asset: Workspace App provenance mismatch")
+        for field in ("workspace_app_binding_verified", "remote_deployment_verified", "host_runtime_verified"):
+            if not isinstance(provenance.get(field), bool):
+                errors.append(f"ai-asset: explicit verification state is required: {field}")
+        source_files = provenance.get("source_files")
+        expected_sources = {".agents/" + relative for relative in skill_files} | {
+            "plugin/metadata.json", "plugin/README.md", "plugin/CONNECTORS.md",
+        }
+        if (not isinstance(source_files, dict) or set(source_files) != expected_sources
+                or any(not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value)
+                       for value in source_files.values())):
+            errors.append("ai-asset: exact canonical source file hashes are required")
+        else:
+            if provenance.get("source_tree_sha256") != tree_sha256(source_files):
+                errors.append("ai-asset: canonical source tree digest mismatch")
+            if any(source_files.get(".agents/" + relative) != digest for relative, digest in copied.items()):
+                errors.append("ai-asset: copied Skills differ from canonical source hashes")
     distribution = {relative: digest for relative, digest in actual.items()
                     if relative != "SOURCE-PROVENANCE.json"}
     if (provenance.get("distribution_files") != distribution
@@ -250,6 +328,10 @@ def main() -> int:
             errors.append(f"{name}: invalid authentication policy")
         if not entry.get("category"):
             errors.append(f"{name}: category is required")
+        if name == AI_ASSET_NAME:
+            asset_manifest = load_json(ROOT / "plugins" / name / ".codex-plugin/plugin.json", errors)
+            if asset_manifest.get("version") == "0.2.0" and entry.get("version") != "0.2.0":
+                errors.append("ai-asset: marketplace version must match the remote plugin")
 
     for name, expected_skill_count in EXPECTED.items():
         plugin = ROOT / "plugins" / name
@@ -347,7 +429,8 @@ def main() -> int:
             print(f"- {error}")
         return 1
 
-    print(f"MARKETPLACE VALIDATION PASSED: plugins={len(EXPECTED)} skills={sum(EXPECTED.values())} bundled_mcp=0 app_backed_plugins=2 shared_apps=1")
+    asset_app = int((ROOT / "plugins" / AI_ASSET_NAME / ".app.json").is_file())
+    print(f"MARKETPLACE VALIDATION PASSED: plugins={len(EXPECTED)} skills={sum(EXPECTED.values())} bundled_mcp=0 app_backed_plugins={2 + asset_app} shared_apps={1 + asset_app}")
     return 0
 
 

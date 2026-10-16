@@ -1,57 +1,66 @@
 {
   "adaptations": [
     "host manifest",
-    "Codex README connector acquisition"
+    "profile notice",
+    "workspace-app-candidate"
   ],
-  "canonical_commit": "1722f2d94569fddb4469070f3ede66c72934f402",
-  "canonical_repository": "flipbelt-ai-asset-center",
-  "canonical_version": "0.1.0",
-  "canonical_worktree_dirty": true,
+  "canonical_commit": "a160657200a93f05050d5c69d31ff7d0f966a448",
+  "canonical_project": "flipbelt-ai-asset-center",
+  "canonical_repository": "https://github.com/FlipBelt/Digital-Asset-Management-Space",
+  "canonical_version": "0.2.0",
+  "canonical_worktree_dirty": false,
+  "connection_profile": "workspace-app-candidate",
   "copied_files": {
-    "skills/flipbelt-ai-asset-registrar/SKILL.md": "b47d13d73e2a02c7ba27063bada05462dd46f449b5b8dc7d46410b3dcc400000",
-    "skills/flipbelt-ai-asset-registrar/references/CONNECTOR.md": "4fae93bff9c682c20788aa22f190436645c5008b4f946b44ad59d6e69b2f5090",
+    "skills/flipbelt-ai-asset-registrar/SKILL.md": "a5126ef22a14e1cf79ba3bc77c6081141389731d4979d7a7aeb43bd66aa395b3",
+    "skills/flipbelt-ai-asset-registrar/references/CONNECTOR.md": "7f1ad59ff6e4260c223d6b3447acdf49a21700758b955b044d465cb1dce15be7",
     "skills/flipbelt-ai-asset-registrar/references/PILOT.md": "2990b9479e16d976dc0dfc13377b611c89bca4989480df87d15cd3ad6352f5f2",
-    "skills/flipbelt-ai-workflow-incubator/SKILL.md": "a18f462d8706ca4f30447af66f87d68a1d5c1795149d9f9ceff4f8109935118b",
-    "skills/flipbelt-ai-workflow-incubator/references/CONNECTOR.md": "4fae93bff9c682c20788aa22f190436645c5008b4f946b44ad59d6e69b2f5090",
+    "skills/flipbelt-ai-workflow-incubator/SKILL.md": "60ee3ec2c692aee12c032cceee9803b6b7d3beea016df0df277f4f5bda34d644",
+    "skills/flipbelt-ai-workflow-incubator/references/CONNECTOR.md": "7f1ad59ff6e4260c223d6b3447acdf49a21700758b955b044d465cb1dce15be7",
     "skills/flipbelt-ai-workflow-incubator/references/PILOT.md": "2990b9479e16d976dc0dfc13377b611c89bca4989480df87d15cd3ad6352f5f2"
   },
   "distribution_files": {
-    ".codex-plugin/plugin.json": "b4f106f32a633b6abaa53321b24bdcf6979224f6c23ae42375ccc0eeb2a84618",
-    "CONNECTORS.md": "295b9c3385705b1574681882ef24b0f11abb8c49085aaa3c276f4deb60626d77",
-    "README.md": "a071f565b9540ef87a7089c5e77736a1761e4d542f8e3935f87b35b96211cb53",
-    "skills/flipbelt-ai-asset-registrar/SKILL.md": "b47d13d73e2a02c7ba27063bada05462dd46f449b5b8dc7d46410b3dcc400000",
-    "skills/flipbelt-ai-asset-registrar/references/CONNECTOR.md": "4fae93bff9c682c20788aa22f190436645c5008b4f946b44ad59d6e69b2f5090",
+    ".app.json": "a8fda686118024b925dd047d9de4540cc056a0be24befda6c465dcd8cd2d1cfe",
+    ".codex-plugin/plugin.json": "c811e816c542580c51d0a039f296130b46a2f9024aecb49621b214d09df385dc",
+    "CONNECTORS.md": "cfba130f0902524e47745513ebc6d0e7480d9e474c26b697e4eb6d3594266d3f",
+    "README.md": "86be67c7018fb5652469d22904da9bf426bb7993dcb737574806d5c30bdd2934",
+    "skills/flipbelt-ai-asset-registrar/SKILL.md": "a5126ef22a14e1cf79ba3bc77c6081141389731d4979d7a7aeb43bd66aa395b3",
+    "skills/flipbelt-ai-asset-registrar/references/CONNECTOR.md": "7f1ad59ff6e4260c223d6b3447acdf49a21700758b955b044d465cb1dce15be7",
     "skills/flipbelt-ai-asset-registrar/references/PILOT.md": "2990b9479e16d976dc0dfc13377b611c89bca4989480df87d15cd3ad6352f5f2",
-    "skills/flipbelt-ai-workflow-incubator/SKILL.md": "a18f462d8706ca4f30447af66f87d68a1d5c1795149d9f9ceff4f8109935118b",
-    "skills/flipbelt-ai-workflow-incubator/references/CONNECTOR.md": "4fae93bff9c682c20788aa22f190436645c5008b4f946b44ad59d6e69b2f5090",
+    "skills/flipbelt-ai-workflow-incubator/SKILL.md": "60ee3ec2c692aee12c032cceee9803b6b7d3beea016df0df277f4f5bda34d644",
+    "skills/flipbelt-ai-workflow-incubator/references/CONNECTOR.md": "7f1ad59ff6e4260c223d6b3447acdf49a21700758b955b044d465cb1dce15be7",
     "skills/flipbelt-ai-workflow-incubator/references/PILOT.md": "2990b9479e16d976dc0dfc13377b611c89bca4989480df87d15cd3ad6352f5f2"
   },
-  "distribution_tree_sha256": "35883084be841b065a76548656732983c2f1acb9533462dede65249eb6a743ae",
+  "distribution_tree_sha256": "bbc6de78509d5e142a7ec53234f8b43a6c6d30af2384c3a15f043d61f3a7f1a7",
   "exclusions": [
     "credentials",
     "virtual environments",
     "business data",
     "raw conversations",
-    "App IDs",
-    "automatic MCP configuration"
+    "unrequested App IDs",
+    "automatic user authorization"
   ],
+  "host_runtime_verified": false,
+  "remote_deployment_verified": false,
+  "remote_mcp_url": "https://jtzhzt.flipbeltchina.com/mcp",
   "role": "downstream-distribution",
   "schema_version": "1.0",
   "source_files": {
-    ".agents/skills/flipbelt-ai-asset-registrar/SKILL.md": "b47d13d73e2a02c7ba27063bada05462dd46f449b5b8dc7d46410b3dcc400000",
-    ".agents/skills/flipbelt-ai-asset-registrar/references/CONNECTOR.md": "4fae93bff9c682c20788aa22f190436645c5008b4f946b44ad59d6e69b2f5090",
+    ".agents/skills/flipbelt-ai-asset-registrar/SKILL.md": "a5126ef22a14e1cf79ba3bc77c6081141389731d4979d7a7aeb43bd66aa395b3",
+    ".agents/skills/flipbelt-ai-asset-registrar/references/CONNECTOR.md": "7f1ad59ff6e4260c223d6b3447acdf49a21700758b955b044d465cb1dce15be7",
     ".agents/skills/flipbelt-ai-asset-registrar/references/PILOT.md": "2990b9479e16d976dc0dfc13377b611c89bca4989480df87d15cd3ad6352f5f2",
-    ".agents/skills/flipbelt-ai-workflow-incubator/SKILL.md": "a18f462d8706ca4f30447af66f87d68a1d5c1795149d9f9ceff4f8109935118b",
-    ".agents/skills/flipbelt-ai-workflow-incubator/references/CONNECTOR.md": "4fae93bff9c682c20788aa22f190436645c5008b4f946b44ad59d6e69b2f5090",
+    ".agents/skills/flipbelt-ai-workflow-incubator/SKILL.md": "60ee3ec2c692aee12c032cceee9803b6b7d3beea016df0df277f4f5bda34d644",
+    ".agents/skills/flipbelt-ai-workflow-incubator/references/CONNECTOR.md": "7f1ad59ff6e4260c223d6b3447acdf49a21700758b955b044d465cb1dce15be7",
     ".agents/skills/flipbelt-ai-workflow-incubator/references/PILOT.md": "2990b9479e16d976dc0dfc13377b611c89bca4989480df87d15cd3ad6352f5f2",
-    "plugin/CONNECTORS.md": "295b9c3385705b1574681882ef24b0f11abb8c49085aaa3c276f4deb60626d77",
-    "plugin/README.md": "a6f2f8beb368b693a0610cc5d197ef6050c4fbb4d65be9814aeaa1eeba508a2b",
-    "plugin/metadata.json": "200c5a1a4d1a31c943f4b0926c57e39747988a860365ea93c35a14cf10d8fdb0"
+    "plugin/CONNECTORS.md": "cfba130f0902524e47745513ebc6d0e7480d9e474c26b697e4eb6d3594266d3f",
+    "plugin/README.md": "bc0936f3b31e563b7dbe1a09bd577a857c1e37d3fbc233e961d8321df485c5db",
+    "plugin/metadata.json": "ece76791aa7800f13560414445e53ff4681c00ddb12b1075d9fc69cefcf73c99"
   },
-  "source_tree_sha256": "28f066a00150959552e52bd3981d9b1f47e8fe3781bafdbc9fb593639a27f2ad",
+  "source_tree_sha256": "9a9068a76592a56a5829adae3f242d990910d316205942138e883a36c57e28c3",
   "synced_paths": [
     "skills"
   ],
   "target_host": "team",
-  "target_plugin": "flipbelt-ai-asset-center"
+  "target_plugin": "flipbelt-ai-asset-center",
+  "workspace_app_binding_verified": false,
+  "workspace_app_id": "asdk_app_6ad1a995522c819197dd69e6aca6f71f"
 }
