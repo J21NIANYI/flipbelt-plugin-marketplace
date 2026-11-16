@@ -63,7 +63,7 @@ def tree_sha256(files: dict[str, str]) -> str:
 
 
 def validate_editorial(errors: list[str]) -> None:
-    from sync_editorial import ADAPTERS, CONTRACT, NAMES, PROVENANCE, generated
+    from sync_editorial import ADAPTERS, CONTRACT, NAMES, PROVENANCE, SKILL_ENTRIES, generated
 
     plugin = ROOT / "plugins" / "flipbelt-editorial-office"
     provenance = load_json(plugin / PROVENANCE, errors)
@@ -84,15 +84,21 @@ def validate_editorial(errors: list[str]) -> None:
     for relative, digest in copied.items():
         if actual.get(relative) != digest:
             errors.append(f"editorial: canonical copy changed: {relative}")
-    for name in NAMES:
-        if f"skills/{name}/SKILL.md" not in copied:
-            errors.append(f"editorial: role entry must remain a canonical copy: {name}")
+    filtered = provenance.get("filtered_skill_sources", {})
+    if not isinstance(filtered, dict) or not set(filtered) <= SKILL_ENTRIES:
+        filtered = {}
+        errors.append("editorial: filtered source records must be limited to role entries")
+    for relative, source_hash in filtered.items():
+        if not re.fullmatch(r"[0-9a-f]{64}", str(source_hash)) or source_hash == actual.get(relative):
+            errors.append(f"editorial: invalid filtered role source digest: {relative}")
+    if not SKILL_ENTRIES <= set(copied) | set(filtered):
+        errors.append("editorial: missing canonical role entry provenance")
     adapted = provenance.get("adapted_source_files", {})
     if not isinstance(adapted, dict) or set(adapted) != set(ADAPTERS):
         errors.append("editorial: reviewed adapter list mismatch")
     expected_copied = {relative for relative in actual
                        if relative.startswith(("skills/", "assets/"))
-                       and relative not in ADAPTERS and not generated(relative)}
+                       and relative not in ADAPTERS and relative not in filtered and not generated(relative)}
     if set(copied) != expected_copied:
         errors.append("editorial: unrecorded or unexpected canonical copy")
     if any("/term-library-" in relative or "/scripts/" in relative for relative in actual):
@@ -114,7 +120,10 @@ def validate_editorial(errors: list[str]) -> None:
                     "entry_sha256": skill_hashes.get(f"{name}/SKILL.md")}:
             errors.append(f"editorial: invalid role contract link: {name}")
     for path in (plugin / "skills").rglob("*.md"):
-        for target in re.findall(r"\[[^\]]*\]\(([^)]+)\)", path.read_text(encoding="utf-8")):
+        text = path.read_text(encoding="utf-8")
+        if re.search(r"管理员 MCP|/admin/mcp|\badmin_[a-z][a-z_]+\b", text):
+            errors.append(f"{path.relative_to(ROOT)}: private administrator workflow distributed")
+        for target in re.findall(r"\[[^\]]*\]\(([^)]+)\)", text):
             target = target.split("#", 1)[0].strip("<>")
             if not target or re.match(r"^[a-zA-Z]+:", target):
                 continue

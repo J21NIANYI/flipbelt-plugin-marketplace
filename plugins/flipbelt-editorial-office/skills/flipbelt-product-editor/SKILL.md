@@ -8,7 +8,7 @@ description: Create or revise FlipBelt V2 product and internal brand_base knowle
 先读取 [共同约束](../flipbelt-editorial-chief/references/workspace-contract.md)、[V2 语义](../flipbelt-editorial-chief/references/v2-contract.md)，再读 [产品来源与表达](references/product-policy.md)。内部品牌任务加读 [品牌模式](references/brand-mode.md)。
 ## 工作
 1. 定位季度、款式分支、已有 Product/Brand Page、Entity 与用户指定资料。按本领域证据优先级逐事实核对。
-2. 先确定最小变更；保留原有产品板块，新增事实写在其实际应用位置。新页按产品价值组织 Section，不套历史十板块。
+2. 先确定最小变更，保留原有产品板块并把新增事实写在实际应用位置。新页、全量改稿或核验产品稿时，按产品规则核对 26FW 板块和前两节的固定字段、顺序及列表层级。核心功能恰好三条，无实图省略图片标注。
 面料按产品规则执行“成分首行、内外层拆分、基础与性能分单元”；核对已知资料是否遗漏，同材料跨款参数须确认适用范围，不能直接复制。
 3. 涉及实体/引用读 [关系台](../flipbelt-reference-desk/SKILL.md)，只修改本页引用与本领域主 Entity。目标缺失保留产品事实并登记候选。
 4. 尺码、口袋数量及尺寸交 [尺码编辑](../flipbelt-size-editor/SKILL.md)。只有显式要求同时编辑两类对象才修改两边。

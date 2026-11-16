@@ -13,6 +13,9 @@ NAMES = ["flipbelt-" + name for name in (
     "editorial-chief", "product-editor", "size-editor", "extended-editor",
     "column-editor", "reference-desk", "editorial-review", "editorial-delivery",
 )]
+SKILL_ENTRIES = {f"skills/{name}/SKILL.md" for name in NAMES}
+ADMIN_HEADING = "## 管理员 MCP"
+ADMIN_CHIEF_NOTE = "线上管理员任务从下方「管理员 MCP」开始，随后按选中职责加载适用领域规则。"
 ADAPTERS = (
     "skills/flipbelt-editorial-chief/references/workspace-contract.md",
     "skills/flipbelt-editorial-chief/references/production-contract.md",
@@ -54,6 +57,23 @@ def excluded(relative: str) -> bool:
             or relative.startswith("skills/flipbelt-reference-desk/references/term-library-"))
 
 
+def team_skill(data: bytes) -> bytes:
+    public = []
+    in_admin_section = False
+    for line in data.decode("utf-8").splitlines(keepends=True):
+        label = line.rstrip("\r\n")
+        if label == ADMIN_HEADING:
+            in_admin_section = True
+            if public and not public[-1].strip():
+                public.pop()
+            continue
+        if label.startswith("## "):
+            in_admin_section = False
+        if not in_admin_section and label != ADMIN_CHIEF_NOTE:
+            public.append(line)
+    return "".join(public).encode("utf-8")
+
+
 def inventory(root: Path) -> dict[str, bytes]:
     files = {}
     for path in sorted(root.rglob("*")):
@@ -84,6 +104,12 @@ def build(source: Path, target: Path = TARGET, check: bool = False) -> dict:
     previous = json.loads(previous_path.read_text(encoding="utf-8")) if previous_path.is_file() else {}
     selected = {name: data for name, data in original.items()
                 if name.startswith(("skills/", "assets/")) and not excluded(name)}
+    filtered = {}
+    for name in sorted(SKILL_ENTRIES):
+        team_entry = team_skill(selected[name])
+        if team_entry != selected[name]:
+            filtered[name] = sha256(selected[name])
+            selected[name] = team_entry
     for name in ADAPTERS:
         old_hash = previous.get("adapted_source_files", {}).get(name)
         if old_hash is not None and old_hash != sha256(original[name]):
@@ -103,7 +129,7 @@ def build(source: Path, target: Path = TARGET, check: bool = False) -> dict:
     selected["source-manifest.json"] = json_bytes({"format_version": 1, "skills": NAMES, "files": skill_hashes})
     copied = {name: sha256(original[name]) for name in selected
               if name.startswith(("skills/", "assets/"))
-              and name in original and name not in ADAPTERS and not generated(name)}
+              and name in original and name not in ADAPTERS and name not in filtered and not generated(name)}
     provenance = {
         "schema_version": "1.0", "role": "downstream-public-distribution",
         "canonical_source": "personal-local/flipbelt-editorial-office (sole maintained source)",
@@ -111,6 +137,7 @@ def build(source: Path, target: Path = TARGET, check: bool = False) -> dict:
         "canonical_file_count": len(original),
         "canonical_tree_sha256": tree_hash({name: sha256(data) for name, data in original.items()}),
         "target_plugin": "flipbelt-editorial-office", "copied_files": copied,
+        "filtered_skill_sources": filtered,
         "adapted_source_files": {name: sha256(original[name]) for name in ADAPTERS},
         "excluded_source_files": sorted(name for name in original if excluded(name)),
         "distribution_files": {name: sha256(data) for name, data in selected.items()},
@@ -118,6 +145,7 @@ def build(source: Path, target: Path = TARGET, check: bool = False) -> dict:
         "allowed_differences": ["team semantic version and existing Workspace App reference",
                                 "team workspace discovery and current-release read-only evidence",
                                 "team validation, historical sources, term query and administrator handoff",
+                                "omit administrator-only MCP instructions from role entries",
                                 "omit internal snapshots, unused icons and privileged HTTP helpers",
                                 "regenerate editorial links and contracts for the distributed files"],
     }
