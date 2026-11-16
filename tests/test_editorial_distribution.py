@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from sync_editorial import ADAPTERS, NAMES, TEAM_FILES, build, inventory, sha256
+from sync_editorial import ADMIN_CHIEF_NOTE, ADAPTERS, NAMES, TEAM_FILES, build, inventory, sha256
 
 
 class EditorialSyncTests(unittest.TestCase):
@@ -58,6 +58,19 @@ class EditorialSyncTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Stale downstream"):
             build(self.source, self.target)
         self.assertEqual(inventory(self.target), before)
+
+    def test_administrator_sections_are_filtered_and_pinned_to_canonical_source(self):
+        relative = f"skills/{NAMES[0]}/SKILL.md"
+        self.write(self.source, relative,
+                   f"# Chief\n{ADMIN_CHIEF_NOTE}\n\n## 管理员 MCP\nadmin_get_editorial_skill\n\n## Team\nKeep guidance\n")
+        self.refresh_manifest()
+        build(self.source, self.target)
+        content = (self.target / relative).read_text(encoding="utf-8")
+        self.assertEqual(content, "# Chief\n## Team\nKeep guidance\n")
+        provenance = json.loads((self.target / "SOURCE-PROVENANCE.json").read_text(encoding="utf-8"))
+        self.assertNotIn(relative, provenance["copied_files"])
+        self.assertEqual(provenance["filtered_skill_sources"][relative], sha256((self.source / relative).read_bytes()))
+        build(self.source, self.target, check=True)
 
     def test_changed_upstream_adapter_requires_review(self):
         build(self.source, self.target)

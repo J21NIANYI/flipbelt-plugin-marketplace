@@ -1,5 +1,10 @@
 # Changelog
 
+## Editorial Office 1.1.0 - 2026-11-16
+
+- Sync the eight editorial roles and current product-page authoring and review rules from the maintained personal plugin.
+- Keep the required employee Knowledge App. The distribution check excludes private administrator instructions and records their canonical source digests.
+
 ## AI Asset Center 0.2.0 App dependency replacement - 2026-10-16
 
 - Replace the required asset App using the generated declaration and provenance from clean canonical commit `ed0c4039fb23ad33c5796f0dbeb8afb25af4b792`; preserve version 0.2.0 and record the dependency change through the marketplace revision.
